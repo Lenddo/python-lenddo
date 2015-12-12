@@ -75,14 +75,14 @@ def _traverse_query(params, key_tree):
 				tuples.append((key_str, str(val)))
 	return tuples
 
-class LenddoAPIClient:
-	"""LenddoAPIClient provides an interface to Lenddo services.
+class LenddoAPIClient(object):
+	"""LenddoAPIClient provides an interface to the Lenddo APIs.
 
-	Example:
+        Example of an HTTP GET to "https://scoreservice.lenddo.com/ClientScore/example-user":
 	from lenddo_api_client import LenddoAPIClient
-	client = LenddoAPIClient('506e1a2314b2117bbaa00f99', 'secret',
-		'http://dev-socialresources.lendqa.com')
-	response = client.get('MemberProfileIds', '50dd00740065f5364c000000')
+	client = LenddoAPIClient('your-api-client-id', 'your-api-client-secret',
+		'https://scoreservice.lenddo.com')
+	response = client.get('ClientScore', 'example-user')
 
 	Exceptions are not caught and are all standard exceptions documented
 	in standard library docs. Be prepared for:
@@ -100,23 +100,52 @@ class LenddoAPIClient:
 		self.endpoint = endpoint
 
 	def get(self, resource, args=None, query=None):
-		"""Send an HTTP GET request to a resource endpoint. Return parsed response."""
+		"""Send an HTTP GET request to a resource endpoint. Return parsed response.
+
+                Arguments:
+                - resource REST resource
+                - args slash-delimited resource identifier, if applicable
+                - query GET query in dictionary format
+                """
 		return self.send('GET', resource, args, query=query)
 
 	def post(self, resource, args=None, data=None):
-		"""Send an HTTP POST request to a resource endpoint. Return parsed response."""
+		"""Send an HTTP POST request to a resource endpoint. Return parsed response.
+
+                Arguments:
+                - resource REST resource
+                - args slash-delimited resource identifier, if applicable
+                - data POST data in dictionary format
+                """
 		return self.send('POST', resource, args, data=data)
 
 	def put(self, resource, args=None, data=None):
-		"""Send an HTTP PUT request to a resource endpoint. Return parsed response."""
+		"""Send an HTTP PUT request to a resource endpoint. Return parsed response.
+
+                Arguments:
+                - resource REST resource
+                - args slash-delimited resource identifier, if applicable
+                - data PUT data in dictionary format
+                """
 		return self.send('PUT', resource, args, data=data)
 
 	def delete(self, resource, args, data=None):
-		"""Send an HTTP DELETE request to a resource endpoint. Return parsed response."""
+		"""Send an HTTP DELETE request to a resource endpoint. Return parsed response.
+
+                Arguments:
+                - resource REST resource
+                - args slash-delimited resource identifier, if applicable
+                - data DELETE data in dictionary format
+                """
 		return self.send('DELETE', resource, args, data=data)
 
 	def options(self, resource, args=None):
-		"""Send an HTTP OPTIONS request to a resource endpoint. Return parsed response."""
+		"""Send an HTTP OPTIONS request to a resource endpoint. Return parsed response.
+
+                Arguments:
+                - resource REST resource
+                - args slash-delimited resource identifier, if applicable
+                """
 		return self.send('OPTIONS', resource, args)
 
 	def send(self, http_method, resource, args=None, query=None, data=None):
