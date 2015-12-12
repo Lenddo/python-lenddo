@@ -13,27 +13,31 @@ Usage
 
 The following snippet makes an HTTP GET request to `https://scoreservice.lenddo.com/ClientScore/example-user`:
 
-	from lenddo_api_client import LenddoAPIClient
-	client = LenddoAPIClient('your-api-client-id', 'your-api-client-secret',
-		'https://scoreservice.lenddo.com')
-	response = client.get('ClientScore', 'example-user')
+```python
+from lenddo_api_client import LenddoAPIClient
+client = LenddoAPIClient('your-api-client-id', 'your-api-client-secret',
+	'https://scoreservice.lenddo.com')
+response = client.get('ClientScore', 'example-user')
+```
 
 The following is the same request with error handling:
 
-    import json
-    import urllib2
+```python
+import json
+import urllib2
 
-	from lenddo_api_client import LenddoAPIClient
-	client = LenddoAPIClient('your-api-client-id', 'your-api-client-secret',
-		'https://scoreservice.lenddo.com')
-    try:
-        response = client.get('ClientScore', 'example-user')
-    except urllib2.HTTPError as e:
-        print 'API call failed with status %d' % e.code
-        # Error responses from the Lenddo APIs still return JSON bodies describing error details,
-        # only now we have to decode the JSON ourselves.
-        print json.loads(e.read())
-        
+from lenddo_api_client import LenddoAPIClient
+client = LenddoAPIClient('your-api-client-id', 'your-api-client-secret',
+	'https://scoreservice.lenddo.com')
+try:
+	response = client.get('ClientScore', 'example-user')
+except urllib2.HTTPError as e:
+	print 'API call failed with status %d' % e.code
+
+	# Error responses from the Lenddo APIs still return JSON bodies describing error details,
+	# only now we have to decode the JSON ourselves.
+	print json.loads(e.read())
+```
 
 Exceptions
 ----------
