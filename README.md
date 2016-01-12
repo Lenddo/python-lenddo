@@ -85,7 +85,7 @@ except urllib2.URLError as e:
 For the sake of brevity, we omit error handling in subsequent examples. In production code, calls should
 be made taking into account at least the possibility of `urllib2.HTTPError`.
 
-## Submitting Applications to Lenddo: Using LenddoClient as a White Label Solution
+## Submitting Applications to Lenddo: Using the API client as a White Label Solution
 
 You may submit data directly to Lenddo while keeping your own branding, thus utilizing Lenddo services
 without having users leave your ecosystem. For each user application, this is accomplished in two
