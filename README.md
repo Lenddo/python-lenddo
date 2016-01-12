@@ -109,7 +109,7 @@ calls. In addition, the `partner_script_id` parameter specifies how Lenddo infor
 you of the results. You may only commit one job per `client_id`/`partner_script_id` pair.
 
 ### The PartnerToken API call
-`PartnerToken` has the following arguments, all required unless stated otherwise:
+`PartnerToken` takes the following arguments, all required unless stated otherwise:
 
 - **client_id** - a string that identifies the application to associate with an OAuth token
 It must match the `client_id` you use in the **CommitPartnerJob** step.
@@ -132,7 +132,7 @@ client = LenddoAPIClient('your-api-client-id', 'your-api-client-secret',
 response = client.post('PartnerToken', None, {
     'client_id' : 'example-user',
     'provider' : 'Facebook',
-    'token_data' : { 'key' : 'example-access-token' })
+    'token_data' : { 'key' : 'example-access-token' }})
 profile_id = response['profile_id']
 # ... and store this profile_id - client_id association
 ```
@@ -151,7 +151,7 @@ profile_id = response['profile_id']
     An internal error occurred. If this persists please contact a Lenddo Representative.
 
 ### The CommitPartnerJob API Call
-`CommitPartnerJob` has the following arguments, all required:
+`CommitPartnerJob` takes the following arguments, all required:
 
 - **partner script id** - Please reference the [developer section](https://partners.lenddo.com/developer_settings) 
     of the partner dashboard. This will define how you're notified of scoring results.
