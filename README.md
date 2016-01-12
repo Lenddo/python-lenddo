@@ -30,9 +30,9 @@ been tested with python versions 2.6.x and 2.7.x.
 
 ## General Usage
 In order to make API calls, first instantiate a `LenddoAPIClient` initialized
-with your API id, your API secret and the base URL. You may then make HTTP
-requests using the client's `get`, `post`, `put`, `delete` and `options`
-methods, which are named after the respective HTTP method. Arguments to
+with your API id, your API secret and the base URL of the API resource you intend to use. You
+may then make HTTP requests using the client's `get`, `post`, `put`, `delete` and `options`
+methods, which are named after the respective HTTP methods. Arguments to
 these methods take the form `(resource-type, resource-id, parameter-dictionary)`:
 - `resource-type` describes the resource being requested (for example `ClientScore`,
 `PartnerToken`)
@@ -55,8 +55,7 @@ response = client.get('ClientScore', 'example-user')
 This results in a signed HTTP GET request to `https://scoreservice.lenddo.com/ClientScore/example-user`.
 
 ### Exceptions and Error Handling
-The exceptions raised by the client are all standard exceptions documented
-in standard library docs. Be prepared for:
+The exceptions raised by the client are standard exceptions documented in standard library docs. Be prepared for:
 * [urllib2.HTTPError](https://docs.python.org/2/library/urllib2.html#urllib2.HTTPError)
 Raised by the underlying urllib2 library when an API call returns non-success status.
 * [urllib2.URLError] (https://docs.python.org/2/library/urllib2.html#urllib2.URLError)
@@ -89,10 +88,10 @@ be made taking into account at least the possibility of `urllib2.HTTPError`.
 ## Submitting Applications to Lenddo: Using LenddoClient as a White Label Solution
 
 You may submit data directly to Lenddo while keeping your own branding, allowing you to
-utilize Lenddo services without having your users leave your ecosystem. For each user
+utilize Lenddo services without having users leave your ecosystem. For each user
 application, this is accomplished in two phases: first by making POST calls to the
-`PartnerToken` API, which saves OAuth tokens associated to your user's application, and
-finally by committing the job using the `CommitPartnerJob` API.  Both APIs are hosted at
+`PartnerToken` resource, which saves OAuth tokens associated to your user's application, and
+finally by committing the job using the `CommitPartnerJob` resource.  Both resources are hosted at
 `networkservice.lenddo.com`.
 
 During the first phase of the job flow, make calls to `PartnerToken` to send social
@@ -106,20 +105,20 @@ Once there are no more tokens to associate to a given application, use the
 `CommitPartnerJob` call to have Lenddo compute a score for your user.
 
 Applications are identified by a `client_id` which must be supplied as parameter to both
-calls. In addition, the `partner_script_id` parameter specifies how Lenddo will inform
+calls. In addition, the `partner_script_id` parameter specifies how Lenddo informs
 you of the results. You may only commit one job per `client_id`/`partner_script_id` pair.
 
 ### The PartnerToken API call
 `PartnerToken` has the following arguments, all required unless stated otherwise:
 
-- **client_id** - a string that identifies the application that you're associating the token to.
+- **client_id** - a string that identifies the application to associate with an OAuth token
 It must match the `client_id` you use in the **CommitPartnerJob** step.
 - **provider** - the token provider. Valid values are:
     `Facebook`, ` LinkedIn`, ` Yahoo`, ` WindowsLive`, or ` Google`
 - **token data** - a dictionary of OAuth token data with keys `key`, `secret` and `extra_data`.
-    **Note:** The **key** and **secret** are not your _application_ key and secret.
+    >**Note:** The **key** and **secret** are not your _application_ key and secret.
     They're the values returned by the provider after a user successfully authenticates using the OAuth flow.
-    **Note**: All tokens must be **OAuth 2.0**.
+    >**Note**: All tokens must be **OAuth 2.0**.
     - **key** - the access token proper, a string
     - **secret** - optional. Some OAuth providers may return a secret.
     - **extra_data** - optional dictionary of additional fields returned by the token provider.
