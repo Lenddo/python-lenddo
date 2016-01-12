@@ -8,15 +8,10 @@
   - [Exceptions and Error Handling] (#exceptions-and-error-handling)
 - [Submitting Applications to Lenddo: Using the API Client as a White Label Solution] (#submitting-applications-to-lenddo-using-the-api-client-as-a-white-label-solution)
   - [The PartnerToken API call] (#the-partnertoken-api-call)
-    - [Example] (#example)
-    - [Errors] (#errors)
   - [The CommitPartnerJob API call] (#the-commitpartnerjob-api-call)
-    - [Example] (#example)
-    - [Errors] (#errors)
 - [Requesting Results from Lenddo] (#requesting-results-from-lenddo)
     - [Scores] (#scores)
     - [Verification Results] (#verification-results)
-    - [Errors] (#errors)
 
 ## Introduction
 The `lenddo_api_client` python module provides the class `LenddoAPIClient`, 
