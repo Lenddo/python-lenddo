@@ -1,5 +1,20 @@
 # Python Lenddo API Client
 
+## Table of Contents
+- [Introduction](#introduction)
+- [Installation](#installation)
+- [General Usage](#general-usage)
+  - [Example: Requesting one of your client's Lenddo Score](#example:-requesting-one-of-your-client's-lenddo-score)
+  - [Exceptions and Error Handling] (#exceptions and error handling)
+- [Submitting Applications to Lenddo: Using LenddoClient as a White Label Solution] (#submitting-applications-to-lenddo:-using-lenddoclient-as-a-white-label-solution)
+  - [The PartnerToken API call] (#the-partnertoken-api-call)
+    - [Example] (#example)
+    - [Errors] (#errors)
+- [Requesting Results from Lenddo] (#requesting-results-from-lenddo)
+    - [Scores] (#scores)
+    - [Verification Results] (#verification-results)
+    - [Errors] (#errors)
+
 ## Introduction
 The `lenddo_api_client` python module provides the class `LenddoAPIClient`, 
 a generic interface to all the Lenddo HTTP APIs. The client makes authenticated HTTP requests
@@ -91,7 +106,7 @@ Applications are identified by a `client_id` which must be supplied as parameter
 calls. In addition, the `partner_script_id` parameter specifies how Lenddo will inform
 you of the results. You may only commit one job per `client_id`/`partner_script_id` pair.
 
-### Phase 1: PartnerToken
+### The PartnerToken API call
 `PartnerToken` has the following arguments, all required unless stated otherwise:
 
 - **client_id** - a string that identifies the application that you're associating the token to.
@@ -122,14 +137,17 @@ profile_id = response['profile_id']
 #### Errors
 - **BAD_REQUEST** _HTTP Status Code: 400_
     Request was malformed, or missing required data.
+
 - **INVALID_TOKEN** _HTTP Status Code: 400_
     Token data was missing required fields or fields had invalid values.
+
 - **TOKEN_FAILURE** _HTTP Status Code: 400_
     Failure upon attempt to use the token.
+
 - **INTERNAL_ERROR** _HTTP Status Code: 500_
     An internal error occurred. If this persists please contact a Lenddo Representative.
 
-### Phase 2: CommitPartnerJob
+### The CommitPartnerJob API Call
 `CommitPartnerJob` has the following arguments, all required:
 
 - **partner script id** - Please reference the [developer section](https://partners.lenddo.com/developer_settings) 
@@ -138,6 +156,7 @@ profile_id = response['profile_id']
     You can use this value to retrieve score results.
 - **profile ids** - a list of `profile_ids` gathered from the results of the `PartnerToken` call.
 
+#### Example
 ```python
 # profile_ids is a list of the ids obtained from PartnerToken responses associated
 # to this application.
@@ -152,8 +171,10 @@ client.post('CommitPartnerJob', None, {
 #### Errors
 - **BAD_REQUEST** _HTTP Status Code: 400_
     Request was malformed, or missing required data.
+
 - **PARTNER_CLIENT_ALREADY_PROCESSED** _HTTP Status Code 400_
     This occurs when the specified *client_id* has already been used.
+
 - **INTERNAL_ERROR** _HTTP Status Code: 500_
     An internal error occurred. If this persists please contact a Lenddo Representative.
 
@@ -162,6 +183,7 @@ client.post('CommitPartnerJob', None, {
 You may obtain score and verification results from Lenddo by making calls to the
 `ClientVerification` and `ClientScore` APIs hosted at `scoreservice.lenddo.com`.
 
+### Scores
 To obtain score results, make a GET request to `ClientScore`:
 
 ```python
@@ -173,6 +195,7 @@ score = response['score']
 flags = response['flags']
 ```
 
+### Verification Results
 To obtain verification results, make a GET request to `ClientVerification`:
 
 ```python
@@ -184,3 +207,11 @@ results = response['verifications']
 flags = response['flags']
 name_results = results['name']
 ```
+
+### Errors
+- **BAD_REQUEST** _HTTP Status Code: 400_
+    Request was malformed, or missing required data.
+
+- **INTERNAL_ERROR** _HTTP Status Code: 500_
+    An internal error occurred. If this persists please contact a Lenddo Representative.
+
