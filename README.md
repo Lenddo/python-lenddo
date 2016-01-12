@@ -4,7 +4,7 @@
 - [Introduction](#introduction)
 - [Installation](#installation)
 - [General Usage](#general-usage)
-  - [Example: Requesting one of your client's Lenddo Score](#example-requesting-one-of-your-client's-lenddo-score)
+  - [Example: Requesting one of your client's Lenddo Score](#example-requesting-one-of-your-clients-lenddo-score)
   - [Exceptions and Error Handling] (#exceptions-and-error-handling)
 - [Submitting Applications to Lenddo: Using LenddoClient as a White Label Solution] (#submitting-applications-to-lenddo-using-lenddoclient-as-a-white-label-solution)
   - [The PartnerToken API call] (#the-partnertoken-api-call)
