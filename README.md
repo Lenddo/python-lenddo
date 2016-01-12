@@ -122,7 +122,7 @@ It must match the `client_id` you use in the **CommitPartnerJob** step.
    > **Note**: All tokens must be **OAuth 2.0**.
     - **key** - the access token proper, a string
     - **secret** - optional. Some OAuth providers may return a secret.
-    - **extra_data** - optional dictionary of additional fields returned by the token provider.
+    - **extra_data** - optional dictionary of additional OAuth fields returned by the token provider.
 
 #### Example
 ```python
