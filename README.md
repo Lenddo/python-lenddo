@@ -162,8 +162,8 @@ profile_id = response['profile_id']
 
 #### Example
 ```python
-# profile_ids is a list of the ids obtained from PartnerToken responses associated
-# to this application.
+# In the actual workflow, profile_ids would be the list of the ids obtained from PartnerToken
+# responses associated to this application.
 profile_ids = ['123FB']
 
 # Assume the same client instance as used in the PartnerToken section.
@@ -175,14 +175,13 @@ client.post('CommitPartnerJob', None, {
 ```
 
 #### Errors
-- **BAD_REQUEST** _HTTP Status Code: 400_
-    Request was malformed, or missing required data.
 
-- **PARTNER_CLIENT_ALREADY_PROCESSED** _HTTP Status Code 400_
-    This occurs when the specified *client_id* has already been used.
-
-- **INTERNAL_ERROR** _HTTP Status Code: 500_
-    An internal error occurred. If this persists please contact a Lenddo Representative.
+### Errors
+|Error Name                         |HTTP Status Code    |Description |
+|----------                         |----------------    |----------- |
+|BAD_REQUEST                        |400                 |Request was malformed, or missing required data. |
+|INTERNAL_ERROR                     |500                 |An internal error occurred. If this persists please contact a Lenddo Representative. |
+|PARTNER_CLIENT_ALREADY_PROCESSED   |400                 |The specified client_id has already been used. |
 
 ## Requesting Results from Lenddo
 
@@ -215,9 +214,9 @@ name_results = results['name']
 ```
 
 ### Errors
-|Error Name            |HTTP Status Code    |Description |
-|----------            |----------------    |----------- |
-|**BAD_REQUEST**       |400                 |Request was malformed, or missing required data. |
-|**INTERNAL_ERROR**    |500                 |An internal error occurred. If this persists please contact a Lenddo Representative. |
-|**NOT_FOUND**         |404                 |The requested client_id was not found. |
+|Error Name        |HTTP Status Code    |Description |
+|----------        |----------------    |----------- |
+|BAD_REQUEST       |400                 |Request was malformed, or missing required data. |
+|INTERNAL_ERROR    |500                 |An internal error occurred. If this persists please contact a Lenddo Representative. |
+|NOT_FOUND         |404                 |The requested client_id was not found. |
 
