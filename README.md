@@ -117,7 +117,8 @@ It must match the `client_id` you use in the **CommitPartnerJob** step.
     `Facebook`, ` LinkedIn`, ` Yahoo`, ` WindowsLive`, or ` Google`
 - **token data** - a dictionary of OAuth token data with keys `key`, `secret` and `extra_data`.
    > **Note:** The **key** and **secret** are not your _application_ key and secret.
-   They're the values returned by the provider after a user successfully authenticates using the OAuth flow.
+   > They're the values returned by the provider after a user successfully authenticates using the OAuth flow.
+
    > **Note**: All tokens must be **OAuth 2.0**.
     - **key** - the access token proper, a string
     - **secret** - optional. Some OAuth providers may return a secret.
