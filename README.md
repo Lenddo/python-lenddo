@@ -6,7 +6,7 @@
 - [General Usage](#general-usage)
   - [Example: Requesting one of your client's Lenddo Score](#example-requesting-one-of-your-clients-lenddo-score)
   - [Exceptions and Error Handling] (#exceptions-and-error-handling)
-- [Submitting Applications to Lenddo: Using LenddoClient as a White Label Solution] (#submitting-applications-to-lenddo-using-lenddoclient-as-a-white-label-solution)
+- [Submitting Applications to Lenddo: Using the API Client as a White Label Solution] (#submitting-applications-to-lenddo-using-the-api-client-as-a-white-label-solution)
   - [The PartnerToken API call] (#the-partnertoken-api-call)
     - [Example] (#example)
     - [Errors] (#errors)
@@ -85,7 +85,7 @@ except urllib2.URLError as e:
 For the sake of brevity, we omit error handling in subsequent examples. In production code, calls should
 be made taking into account at least the possibility of `urllib2.HTTPError`.
 
-## Submitting Applications to Lenddo: Using the API client as a White Label Solution
+## Submitting Applications to Lenddo: Using the API Client as a White Label Solution
 
 You may submit data directly to Lenddo while keeping your own branding, thus utilizing Lenddo services
 without having users leave your ecosystem. For each user application, this is accomplished in two
