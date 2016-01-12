@@ -138,17 +138,12 @@ profile_id = response['profile_id']
 ```
 
 #### Errors
-- **BAD_REQUEST** _HTTP Status Code: 400_
-    Request was malformed, or missing required data.
-
-- **INVALID_TOKEN** _HTTP Status Code: 400_
-    Token data was missing required fields or fields had invalid values.
-
-- **TOKEN_FAILURE** _HTTP Status Code: 400_
-    Failure upon attempt to use the token.
-
-- **INTERNAL_ERROR** _HTTP Status Code: 500_
-    An internal error occurred. If this persists please contact a Lenddo Representative.
+|Error Name                         |HTTP Status Code    |Description |
+|----------                         |----------------    |----------- |
+|BAD_REQUEST                        |400                 |Request was malformed, or missing required data. |
+|INVALID_TOKEN                      |400                 |Token data was missing required fields or fields had invalid values.|
+|TOKEN_FAILURE                      |400                 |Failure upon attempt to use the token.|
+|INTERNAL_ERROR                     |500                 |An internal error occurred. If this persists please contact a Lenddo Representative.|
 
 ### The CommitPartnerJob API Call
 `CommitPartnerJob` takes the following arguments, all required:
@@ -175,13 +170,12 @@ client.post('CommitPartnerJob', None, {
 ```
 
 #### Errors
-
-### Errors
 |Error Name                         |HTTP Status Code    |Description |
 |----------                         |----------------    |----------- |
 |BAD_REQUEST                        |400                 |Request was malformed, or missing required data. |
 |INTERNAL_ERROR                     |500                 |An internal error occurred. If this persists please contact a Lenddo Representative. |
 |PARTNER_CLIENT_ALREADY_PROCESSED   |400                 |The specified client_id has already been used. |
+
 
 ## Requesting Results from Lenddo
 
