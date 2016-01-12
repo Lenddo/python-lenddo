@@ -6,8 +6,8 @@ a generic interface to all the Lenddo HTTP APIs. The client makes authenticated 
 using the HMAC-SHA1 signing method.
 
 ## Installation
-There are no third-party dependencies. The only installation step is to drop
-`lenddo_api_client.py` into a directory in your python path. The client has
+The python Lenddo API client library has no third-party dependencies. The only installation
+step is to drop `lenddo_api_client.py` into a directory in your `PYTHONPATH`. The client has
 been tested with python versions 2.6.x and 2.7.x. 
 
 ## General Usage
@@ -93,19 +93,18 @@ you of the results. You may only commit one job per `client_id`/`partner_script_
 
 ### Phase 1: PartnerToken
 `PartnerToken` has the following arguments, all required unless stated otherwise:
-1. **client_id** - a string that identifies the application that you're posting the token.
+
+- **client_id** - a string that identifies the application that you're associating the token to.
 It must match the `client_id` you use in the **CommitPartnerJob** step.
-
-2. **provider** - the token provider. Valid values are:
+- **provider** - the token provider. Valid values are:
     `Facebook`, ` LinkedIn`, ` Yahoo`, ` WindowsLive`, or ` Google`
-
-3. **token data** - a dictionary of OAuth token data with keys `key`, `secret` and `extra_data`.
+- **token data** - a dictionary of OAuth token data with keys `key`, `secret` and `extra_data`.
     **Note:** The **key** and **secret** are not your _application_ key and secret.
     They're the values returned by the provider after a user successfully authenticates using the OAuth flow.
     **Note**: All tokens must be **OAuth 2.0**.
-    1. **key** - the access token proper, a string
-    2. **secret** - optional. Some OAuth providers may return a secret.
-    3. **extra_data** - optional dictionary of additional fields returned by the token provider.
+    - **key** - the access token proper, a string
+    - **secret** - optional. Some OAuth providers may return a secret.
+    - **extra_data** - optional dictionary of additional fields returned by the token provider.
 
 #### Example
 ```python
@@ -121,25 +120,23 @@ profile_id = response['profile_id']
 ```
 
 #### Errors
-* **BAD_REQUEST** _HTTP Status Code: 400_
+- **BAD_REQUEST** _HTTP Status Code: 400_
     Request was malformed, or missing required data.
-    
-* **INVALID_TOKEN** _HTTP Status Code: 400_
+- **INVALID_TOKEN** _HTTP Status Code: 400_
     Token data was missing required fields or fields had invalid values.
-
-* **TOKEN_FAILURE** _HTTP Status Code: 400_
+- **TOKEN_FAILURE** _HTTP Status Code: 400_
     Failure upon attempt to use the token.
-    
-* **INTERNAL_ERROR** _HTTP Status Code: 500_
+- **INTERNAL_ERROR** _HTTP Status Code: 500_
     An internal error occurred. If this persists please contact a Lenddo Representative.
 
 ### Phase 2: CommitPartnerJob
 `CommitPartnerJob` has the following arguments, all required:
-1. **partner script id** - Please reference the [developer section](https://partners.lenddo.com/developer_settings) 
+
+- **partner script id** - Please reference the [developer section](https://partners.lenddo.com/developer_settings) 
     of the partner dashboard. This will define how you're notified of scoring results.
-2. **client id** - a transaction id that, coupled with the partner script id, identifies this job.
+- **client id** - a transaction id that, coupled with the partner script id, identifies this job.
     You can use this value to retrieve score results.
-3. **profile ids** - a list of `profile_ids` gathered from the results of the `PartnerToken` call.
+- **profile ids** - a list of `profile_ids` gathered from the results of the `PartnerToken` call.
 
 ```python
 # profile_ids is a list of the ids obtained from PartnerToken responses associated
@@ -153,11 +150,11 @@ client.post('CommitPartnerJob', None, {
 ```
 
 #### Errors
-* **BAD_REQUEST** _HTTP Status Code: 400_
+- **BAD_REQUEST** _HTTP Status Code: 400_
     Request was malformed, or missing required data.
-* **PARTNER_CLIENT_ALREADY_PROCESSED** _HTTP Status Code 400_
+- **PARTNER_CLIENT_ALREADY_PROCESSED** _HTTP Status Code 400_
     This occurs when the specified *client_id* has already been used.
-* **INTERNAL_ERROR** _HTTP Status Code: 500_
+- **INTERNAL_ERROR** _HTTP Status Code: 500_
     An internal error occurred. If this persists please contact a Lenddo Representative.
 
 ## Requesting Results from Lenddo
