@@ -166,6 +166,8 @@ profile_id = response['profile_id']
 # to this application.
 profile_ids = ['123FB']
 
+# Assume the same client instance as used in the PartnerToken section.
+# This client connects to networkservice.lenddo.com.
 client.post('CommitPartnerJob', None, {
     'partner_script_id' : 'your-partner-script-id',
     'client_id' : 'example-user',
