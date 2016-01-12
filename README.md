@@ -87,12 +87,11 @@ be made taking into account at least the possibility of `urllib2.HTTPError`.
 
 ## Submitting Applications to Lenddo: Using LenddoClient as a White Label Solution
 
-You may submit data directly to Lenddo while keeping your own branding, allowing you to
-utilize Lenddo services without having users leave your ecosystem. For each user
-application, this is accomplished in two phases: first by making POST calls to the
-`PartnerToken` resource, which saves OAuth tokens associated to your user's application, and
-finally by committing the job using the `CommitPartnerJob` resource.  Both resources are hosted at
-`networkservice.lenddo.com`.
+You may submit data directly to Lenddo while keeping your own branding, thus utilizing Lenddo services
+without having users leave your ecosystem. For each user application, this is accomplished in two
+phases: first by making POST calls to the `PartnerToken` resource, which saves OAuth tokens associated
+to your user's application, and finally by committing the job using the `CommitPartnerJob` resource.
+Both resources are hosted at `networkservice.lenddo.com`.
 
 Applications are identified by a `client_id` which must be supplied as parameter to both
 calls. In addition, the `partner_script_id` parameter specifies how Lenddo informs
