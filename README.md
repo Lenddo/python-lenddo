@@ -94,6 +94,11 @@ application, this is accomplished in two phases: first by making POST calls to t
 finally by committing the job using the `CommitPartnerJob` resource.  Both resources are hosted at
 `networkservice.lenddo.com`.
 
+Applications are identified by a `client_id` which must be supplied as parameter to both
+calls. In addition, the `partner_script_id` parameter specifies how Lenddo informs
+you of the results. You may only commit one job per `client_id`/`partner_script_id` pair.
+
+### The PartnerToken API call
 During the first phase of the job flow, make calls to `PartnerToken` to send social
 network OAuth tokens to Lenddo. Each call to `PartnerToken` returns a `profile_id`
 which you must save in order to send it along with all other `profile_ids` associated
@@ -101,14 +106,6 @@ to this application when you finally commit the job. To add multiple tokens for 
 application, make multiple `PartnerToken` calls, each time saving the returned
 `profile_id`.
 
-Once there are no more tokens to associate to a given application, use the
-`CommitPartnerJob` call to have Lenddo compute a score for your user.
-
-Applications are identified by a `client_id` which must be supplied as parameter to both
-calls. In addition, the `partner_script_id` parameter specifies how Lenddo informs
-you of the results. You may only commit one job per `client_id`/`partner_script_id` pair.
-
-### The PartnerToken API call
 `PartnerToken` takes the following arguments, all required unless stated otherwise:
 
 - **client_id** - a string that identifies the application to associate with an OAuth token
@@ -146,6 +143,10 @@ profile_id = response['profile_id']
 |INTERNAL_ERROR                     |500                 |An internal error occurred. If this persists please contact a Lenddo Representative.|
 
 ### The CommitPartnerJob API Call
+Once there are no more tokens to associate to a given application, use the
+`CommitPartnerJob` call to have Lenddo compute a score for your user. To
+obtain the results of the job, see [Requesting Results from Lenddo] (#requesting-results-from-lenddo).
+
 `CommitPartnerJob` takes the following arguments, all required:
 
 - **partner script id** - Please reference the [developer section](https://partners.lenddo.com/developer_settings) 
