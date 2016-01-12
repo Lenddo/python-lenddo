@@ -112,7 +112,7 @@ you of the results. You may only commit one job per `client_id`/`partner_script_
 `PartnerToken` takes the following arguments, all required unless stated otherwise:
 
 - **client_id** - a string that identifies the application to associate with an OAuth token
-It must match the `client_id` you use in the **CommitPartnerJob** step.
+It must match the `client_id` you use in the `CommitPartnerJob` step.
 - **provider** - the token provider. Valid values are:
     `Facebook`, ` LinkedIn`, ` Yahoo`, ` WindowsLive`, or ` Google`
 - **token data** - a dictionary of OAuth token data with keys `key`, `secret` and `extra_data`.
@@ -155,7 +155,8 @@ profile_id = response['profile_id']
 
 - **partner script id** - Please reference the [developer section](https://partners.lenddo.com/developer_settings) 
     of the partner dashboard. This will define how you're notified of scoring results.
-- **client id** - a transaction id that, coupled with the partner script id, identifies this job.
+- **client id** - a transaction id that, coupled with the partner script id, identifies this job. For any given
+    application, this is the same client_id used in the `PartnerToken` call.
     You can use this value to retrieve score results.
 - **profile ids** - a list of `profile_ids` gathered from the results of the `PartnerToken` call.
 
