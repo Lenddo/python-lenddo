@@ -218,3 +218,6 @@ name_results = results['name']
 - **INTERNAL_ERROR** _HTTP Status Code: 500_
     An internal error occurred. If this persists please contact a Lenddo Representative.
 
+- **NOT_FOUND** _HTTP Status Code: 404_
+    The requested client_id was not found.
+
