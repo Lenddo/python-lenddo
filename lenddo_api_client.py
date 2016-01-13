@@ -91,7 +91,7 @@ class LenddoAPIClient(object):
 	- ValueError (failed to decode JSON, malformed endpoint URL)
 	"""
 
-	USER_AGENT = "LenddoAPIClient.py version 0.3"
+	USER_AGENT = "LenddoAPIClient.py version 1.0"
 
 
 	def __init__(self, client_id, secret_key, endpoint):
