@@ -141,6 +141,9 @@ profile_id = response['profile_id']
 ```
 
 #### Errors
+To inspect error details, catch urllib2.HTTPError, call the exception object's 'read()' method, and decode the
+JSON response.  In the table below, 'Error Name' refers to the string found in the response body's 'name' field.
+
 |Error Name                         |HTTP Status Code    |Description |
 |----------                         |----------------    |----------- |
 |BAD_REQUEST                        |400                 |Request was malformed, or missing required data. |
@@ -177,6 +180,9 @@ client.post('CommitPartnerJob', None, {
 ```
 
 #### Errors
+To inspect error details, catch urllib2.HTTPError, call the exception object's 'read()' method, and decode the
+JSON response.  In the table below, 'Error Name' refers to the string found in the response body's 'name' field.
+
 |Error Name                         |HTTP Status Code    |Description |
 |----------                         |----------------    |----------- |
 |BAD_REQUEST                        |400                 |Request was malformed, or missing required data. |
@@ -215,6 +221,9 @@ name_results = results['name']
 ```
 
 ### Errors
+To inspect error details, catch urllib2.HTTPError, call the exception object's 'read()' method, and decode the
+JSON response.  In the table below, 'Error Name' refers to the string found in the response body's 'name' field.
+
 |Error Name        |HTTP Status Code    |Description |
 |----------        |----------------    |----------- |
 |BAD_REQUEST       |400                 |Request was malformed, or missing required data. |
