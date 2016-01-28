@@ -106,24 +106,36 @@ application, make multiple `PartnerToken` calls, each time saving the returned
 It must match the `client_id` you use in the `CommitPartnerJob` step.
 - **provider** - the token provider. Valid values are:
     `Facebook`, ` LinkedIn`, ` Yahoo`, ` WindowsLive`, or ` Google`
-- **token data** - a dictionary of OAuth token data with keys `key`, `secret` and `extra_data`.
-   > **Note:** The `key` and `secret` are _not_ your application key and secret.
-   > They're the values returned by the provider after a user successfully authenticates using the OAuth flow.
-
+- **token data** - a dictionary of OAuth token data with keys `key` and `extra_data`.
    > **Note**: All tokens must be **OAuth 2.0**.
     - **key** - the access token proper, a string
-    - **secret** - optional. Some OAuth providers may return a secret.
     - **extra_data** - optional dictionary of additional OAuth fields returned by the token provider.
+
+**Note** In order for Lenddo to generate the profile_id, it has to use the supplied OAuth token,
+which may fail (for example, when the user has denied permission or the token has expired). When
+this happens, PartnerToken will return with HTTP 400 and the body of the response will contain both the
+error code and response body that Lenddo received when trying to use the token. The provider's HTTP response
+is under 'provider_status_code' and the provider's response body is under "provider_response". The format of
+the "provider_response" varies among OAuth providers; see the OAuth provider's documentation for details.
+
 
 #### Example
 ```python
+import json
+import urllib2
 from lenddo_api_client import LenddoAPIClient
+
 client = LenddoAPIClient('your-api-client-id', 'your-api-client-secret',
 	'https://networkservice.lenddo.com')
-response = client.post('PartnerToken', None, {
-    'client_id' : 'example-user',
-    'provider' : 'Facebook',
-    'token_data' : { 'key' : 'example-access-token' }})
+try:
+    response = client.post('PartnerToken', None, {
+        'client_id' : 'example-user',
+        'provider' : 'Facebook',
+        'token_data' : { 'key' : 'example-access-token' }})
+except urllib2.HTTPError as e:
+    print 'API call failed with HTTP status %d' % e.code
+    print json.loads(e.read())
+
 profile_id = response['profile_id']
 # ... and store this profile_id - client_id association
 ```
@@ -133,7 +145,7 @@ profile_id = response['profile_id']
 |----------                         |----------------    |----------- |
 |BAD_REQUEST                        |400                 |Request was malformed, or missing required data. |
 |INVALID_TOKEN                      |400                 |Token data was missing required fields or fields had invalid values.|
-|TOKEN_FAILURE                      |400                 |Failure upon attempt to use the token.|
+|TOKEN_FAILURE                      |400                 |Failure upon attempt to use the token. 'provider_status_code' contains the provider's HTTP status code. 'provider_response' contains the provider's error response body. |
 |INTERNAL_ERROR                     |500                 |An internal error occurred. If this persists please contact a Lenddo Representative.|
 
 ### The CommitPartnerJob API Call
