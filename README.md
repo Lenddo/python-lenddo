@@ -111,12 +111,13 @@ It must match the `client_id` you use in the `CommitPartnerJob` step.
     - **key** - the access token proper, a string
     - **extra_data** - optional dictionary of additional OAuth fields returned by the token provider.
 
-**Note** In order for Lenddo to generate the profile_id, it has to use the supplied OAuth token,
+#### Note
+In order for Lenddo to generate the profile_id, it has to use the supplied OAuth token,
 which may fail (for example, when the user has denied permission or the token has expired). When
 this happens, PartnerToken will return with HTTP 400 and the body of the response will contain both the
-error code and response body that Lenddo received when trying to use the token. The provider's HTTP response
-is under 'provider_status_code' and the provider's response body is under "provider_response". The format of
-the "provider_response" varies among OAuth providers; see the OAuth provider's documentation for details.
+error code and response body that Lenddo received when trying to use the token. The provider`s HTTP response
+is under `provider_status_code` and the provider's response body is under `provider_response`. The format of
+the `provider_response` varies among OAuth providers; see the OAuth provider's documentation for details.
 
 
 #### Example
@@ -148,7 +149,7 @@ JSON response.  In the table below, 'Error Name' refers to the string found in t
 |----------                         |----------------    |----------- |
 |BAD_REQUEST                        |400                 |Request was malformed, or missing required data. |
 |INVALID_TOKEN                      |400                 |Token data was missing required fields or fields had invalid values.|
-|TOKEN_FAILURE                      |400                 |Failure upon attempt to use the token. 'provider_status_code' contains the provider's HTTP status code. 'provider_response' contains the provider's error response body. |
+|TOKEN_FAILURE                      |400                 |Failure upon attempt to use the token. `provider_status_code` contains the provider's HTTP status code. `provider_response` contains the provider's error response body. |
 |INTERNAL_ERROR                     |500                 |An internal error occurred. If this persists please contact a Lenddo Representative.|
 
 ### The CommitPartnerJob API Call
