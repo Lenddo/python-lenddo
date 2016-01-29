@@ -114,8 +114,8 @@ It must match the `client_id` you use in the `CommitPartnerJob` step.
 #### Note
 In order for Lenddo to generate the profile_id, it has to use the supplied OAuth token,
 which may fail (for example, when the user has denied permission or the token has expired). When
-this happens, PartnerToken will return with HTTP 400 and the body of the response will contain both the
-error code and response body that Lenddo received when trying to use the token. The provider`s HTTP response
+this happens, `PartnerToken` will return with HTTP 400 and the body of the response will contain both the
+error code and response body that Lenddo received when trying to use the token. The provider's HTTP response
 is under `provider_status_code` and the provider's response body is under `provider_response`. The format of
 the `provider_response` varies among OAuth providers; see the OAuth provider's documentation for details.
 
