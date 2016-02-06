@@ -38,16 +38,16 @@ or PUT request, they are JSON-encoded and submitted as the request body.
 
 ### Example: Requesting one of your client's Lenddo Score
 In this example we make a GET request to the `ClientScore` API to obtain the score for a
-client with id `example-user`. `ClientScore` is hosted at `scoreservice.lenddo.com`.
+client with id `example-application`. `ClientScore` is hosted at `scoreservice.lenddo.com`.
 
 ```python
 from lenddo_api_client import LenddoAPIClient
 client = LenddoAPIClient('your-api-client-id', 'your-api-client-secret',
 	'https://scoreservice.lenddo.com')
-response = client.get('ClientScore', 'example-user')
+response = client.get('ClientScore', 'example-application')
 ```
 
-This results in a signed HTTP GET request to `https://scoreservice.lenddo.com/ClientScore/example-user`.
+This results in a signed HTTP GET request to `https://scoreservice.lenddo.com/ClientScore/example-application`.
 
 ### Exceptions and Error Handling
 The exceptions raised by the client are standard exceptions documented in standard library docs. Be prepared for:
@@ -66,7 +66,7 @@ from lenddo_api_client import LenddoAPIClient
 client = LenddoAPIClient('your-api-client-id', 'your-api-client-secret',
 	'https://scoreservice.lenddo.com')
 try:
-	response = client.get('ClientScore', 'example-user')
+	response = client.get('ClientScore', 'example-application')
 except urllib2.HTTPError as e:
 	print 'API call failed with status %d' % e.code
 
@@ -130,7 +130,7 @@ client = LenddoAPIClient('your-api-client-id', 'your-api-client-secret',
 	'https://networkservice.lenddo.com')
 try:
     response = client.post('PartnerToken', None, {
-        'client_id' : 'example-user',
+        'client_id' : 'example-application',
         'provider' : 'Facebook',
         'token_data' : { 'key' : 'example-access-token' }})
 except urllib2.HTTPError as e:
@@ -157,7 +157,7 @@ Once there are no more tokens to associate to a given application, use the
 `CommitPartnerJob` call to have Lenddo compute a score for your user. To
 obtain the results of the job, see [Requesting Results from Lenddo] (#requesting-results-from-lenddo).
 
-`CommitPartnerJob` takes the following arguments, all required:
+`CommitPartnerJob` takes the following required arguments:
 
 - **partner script id** - Please reference the [developer section](https://partners.lenddo.com/developer_settings) 
     of the partner dashboard. This will define how you're notified of scoring results.
@@ -165,6 +165,10 @@ obtain the results of the job, see [Requesting Results from Lenddo] (#requesting
     application, this is the same client_id used in the `PartnerToken` call.
     You can use this value to retrieve score results.
 - **profile ids** - a list of `profile_ids` gathered from the results of the `PartnerToken` call.
+
+In addition to these arguments, CommitPartnerJob accepts the following:
+- **verification_data** - A dictionary representing a verification form
+- **partner_data** - A dictionary pf form data.
 
 #### Example
 ```python
@@ -176,7 +180,7 @@ profile_ids = ['123FB']
 # This client connects to networkservice.lenddo.com.
 client.post('CommitPartnerJob', None, {
     'partner_script_id' : 'your-partner-script-id',
-    'client_id' : 'example-user',
+    'client_id' : 'example-application',
     'profile_ids' : profile_ids})
 ```
 
@@ -203,7 +207,7 @@ To obtain score results, make a GET request to `ClientScore`:
 from lenddo_api_client import LenddoAPIClient
 client = LenddoAPIClient('your-api-client-id', 'your-api-client-secret',
 	'https://scoreservice.lenddo.com')
-response = client.get('ClientScore', 'example-user')
+response = client.get('ClientScore', 'example-application', {'partner_script_id' : 'your-partner-script-id'})
 score = response['score']
 flags = response['flags']
 ```
@@ -215,11 +219,146 @@ To obtain verification results, make a GET request to `ClientVerification`:
 from lenddo_api_client import LenddoAPIClient
 client = LenddoAPIClient('your-api-client-id', 'your-api-client-secret',
 	'https://scoreservice.lenddo.com')
-response = client.get('ClientVerification', 'example-user')
+response = client.get('ClientVerification', 'example-application', {'partner_script_id' : 'your-partner-script-id'})
 results = response['verifications']
 flags = response['flags']
 name_results = results['name']
 ```
+### Application Decision Results
+To obtain application decision results, make a GET request to `ClientVerification`:
+
+```python
+from lenddo_api_client import LenddoAPIClient
+client = LenddoAPIClient('your-api-client-id', 'your-api-client-secret',
+	'https://scoreservice.lenddo.com')
+response = client.get('ApplicationDecision', 'example-application', {'partner_script_id' : 'your-partner-script-id'})
+results = response['decision']
+flags = response['flags']
+```
+
+### FICO Score Results
+To obtain FICO score results, make a GET request to `FICOScore`:
+
+```python
+from lenddo_api_client import LenddoAPIClient
+client = LenddoAPIClient('your-api-client-id', 'your-api-client-secret',
+	'https://scoreservice.lenddo.com')
+response = client.get('FICOScore', 'example-application', {'partner_script_id' : 'your-partner-script-id'})
+results = response['score']
+pd = response['pd']
+```
+
+### partner_data format for FICO scoring
+The partner_data format for a FICO score application has has three required fields:
+- **application** dictionary, required
+- **bureauData** dictionar
+- **applicant** dictionary
+
+## applicationData.application
+The application object has the following fields.
+
+| Key | Type | Required | Description |
+|--------------|------|---|--------------------------------------------------------------------------------------------------|
+| applicationId | string | Yes | |
+| date | string in ISO 8601 format | Yes | |
+| productType | string | Yes | one of "Mortgage", "Personal Loans", "Overdraft", "Cards", "Auto Loans", "Payday Loan", "SME", or "Others" |
+| channel | string | Yes | one of "Partner/Store", "Internet", "Branch", "Small business hub", "Pre-approved", "Top-up", "Mobile App" or "ATM" |
+| product | object | Yes | see description below |
+
+
+## applicationData.application.product
+The product object has the following fields.
+
+| Key | Type | Required | Description |
+|--------------|------|---|--------------------------------------------------------------------------------------------------|
+| loanAmount | integer | Yes | |
+| paymentMethod | string | Yes | one of "Auto debit" or "Payment through transaction account" |
+| indicatorForPresenceOfGuarantor | boolean | Yes | |
+| loanPurpose | string | Yes | one of "Loan for personal expenses", "Working capital loan", "Holiday", "Loan for making interest payment", "Education", "Renovation", "Refinancing", or "Others" |
+
+## applicationData.bureauData
+The "bureauData" object has two fields, "enquiries" (array of objects) and "tradelines" (array of objects).
+
+## applicationData.bureauData.enquiries
+Each enquiry object in the enquiries array has the following fields.
+
+| Key | Type | Required | Description |
+|--------------|------|---|--------------------------------------------------------------------------------------------------|
+| amount | integer | Yes | the amount of the enquiry |
+| applicationId | string | Yes | |
+| enquiryDate | string in DDMMYYYY format | Yes | |
+| entityType | string | Yes | |
+| memberCd | string | Yes | |
+| memberRef | string | Yes | |
+| processedDate | string in DDMMYYYY format | Yes | the date when the enquiry was made |
+| productCd | string | Yes | the product applied for |
+| purpose | integer | Yes | purpose of the enquiry |
+| controlNum | integer | No | a system-generated enquiry control number |
+
+## applicationData.bureauData.tradelines
+Each tradeline object in the tradelines array has the following fields.
+
+| Key | Type | Required | Description |
+|--------------|------|---|--------------------------------------------------------------------------------------------------|
+| accountNum | string | Yes |
+| accountStatus | integer | Yes |
+| accountType | integer | Yes | |
+| accountTypeCd | integer | Yes |
+| amtOverdue | number | No | the amount past due as of the date in the Date Reported field |
+| applicationId | string | Yes | |
+| cashLimit | number | No | |
+| closeDate | string in DDMMYYYY format | Yes | the date the account was closed |
+| collateralType | integer | Yes | 
+| collateralValue | number | No | |
+| controlNum | integer | No | a system-generated enquiry control number |
+| creditLimit | number | No | for Credit Card (Account Type 10) and Fleet Card (Account Type 16, this field contains the highest amount of credit used in the history of the account |
+| currBalance | number | No | the entire amount of credit or loan outstanding, including the current and overdue portion, if any, together with interest last applied, as of the date in the Date Reported field |
+| delqHisMMYY | string | Yes | cycle delinquency (up to 48 months) |
+| installmentAmt | number | No | |
+| interestRate | number | No | |
+| lastPayment | number | No | |
+| lastPaymentDate | string in DDMMYYYY format | Yes | |
+| memberCd | string | Yes | |
+| memberRef | string | Yes | |
+| openDate | string in DDMMYYYY format | Yes | date of first disbursement of the account |
+| ownershipInd | integer | Yes | 1 = Individual, 2 = Authorised User (refers to supplementary credit card holder), 3 = Guarantor, 4 = Joint |
+| payHistEndDate | string in DDMMYYYY | Yes | the date of the end of the payment history |
+| payHistStartDate | string in DDMMYYYY format | Yes | date of the beginning of the payment history |
+| processedDate | string in DDMMYYYY format | Yes | |
+| productCd | string | Yes | |
+| repaymentTenure | integer | Yes | term of loan | 
+| reportedDate | integer | No | Yes |
+| sanctionAmt | number | No | for all other accounts, this field contains the amount of loan sanctioned |
+| settlementAmt | number | No | settlement amount |
+| suitFiledCurrStatus | string | Yes  | suit filed status of the current month |
+| suitFiledStatusMMYY | string | Yes | suit filed status history (up to 48 months)) |
+| termFrequency | string | Yes | payment frequency |
+| writeoffPrincipalAmt | number | No | |
+| writeoffSettledStatus | string | Yes | |
+| writeoffTotalAmt | number | No | write-off amount - total |
+
+## applicant
+The applicant object has the following fields.
+
+| Key | Type | Required | Description |
+|--------------|------|---|--------------------------------------------------------------------------------------------------|
+| dob | string in ISO 8601 format | Yes | |
+| mobileTelephoneProvided | boolean | No | |
+| gender | string | No | one of "MALE" or "FEMALE" |
+| maritalStatus | string | No | one of "Married", "Living together", "Single", "Widowed", "Divorced/Separated", or "Other"  
+| residenceRegion | string | No | |
+| emailProvided | boolean | No | |
+| employmentStatus | string | No | one of "Salaried", "Own Business/ Self-Employed", "Retired/Pensioner", "Part-time Employed / Freelance / Contractual Employee / Laborer", "Housewife/Other", or "Student" |
+| yearsInCurrentJob | integer | No | |
+| homeTelephoneProvided | boolean | No | |
+| educationLevel | string | No | one of "Undergraduate", "Graduate", "Post Graduate", or "Diploma and Specialized Courses"  |
+| yearsOfService | integer | No | |
+| residentialStatus | string | No | one of "Self Owned", "Company Provided", "With Parents", "Rented", "Paying Guest", "Leased", or "Other" 
+| workTelephoneProvided | boolean | No | |
+| dependents | integer | No | |
+| numOfMonthsInCurrentAddress | integer | No | |
+| monthlyIncome | integer | No | |
+| existingCustomer | object | No | object with fields "timeWithTheBank" (integer) and "noOfAccountsWithTheBank" (integer)
 
 ### Errors
 To inspect error details, catch urllib2.HTTPError, call the exception object's 'read()' method, and decode the
