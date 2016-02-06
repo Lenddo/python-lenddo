@@ -254,7 +254,7 @@ The partner_data format for a FICO score application has has three required fiel
 - **bureauData** dictionar
 - **applicant** dictionary
 
-## applicationData.application
+#### applicationData.application
 The application object has the following fields.
 
 | Key | Type | Required | Description |
@@ -266,7 +266,7 @@ The application object has the following fields.
 | product | object | Yes | see description below |
 
 
-## applicationData.application.product
+#### applicationData.application.product
 The product object has the following fields.
 
 | Key | Type | Required | Description |
@@ -276,10 +276,10 @@ The product object has the following fields.
 | indicatorForPresenceOfGuarantor | boolean | Yes | |
 | loanPurpose | string | Yes | one of "Loan for personal expenses", "Working capital loan", "Holiday", "Loan for making interest payment", "Education", "Renovation", "Refinancing", or "Others" |
 
-## applicationData.bureauData
+#### applicationData.bureauData
 The "bureauData" object has two fields, "enquiries" (array of objects) and "tradelines" (array of objects).
 
-## applicationData.bureauData.enquiries
+#### applicationData.bureauData.enquiries
 Each enquiry object in the enquiries array has the following fields.
 
 | Key | Type | Required | Description |
@@ -295,7 +295,7 @@ Each enquiry object in the enquiries array has the following fields.
 | purpose | integer | Yes | purpose of the enquiry |
 | controlNum | integer | No | a system-generated enquiry control number |
 
-## applicationData.bureauData.tradelines
+#### applicationData.bureauData.tradelines
 Each tradeline object in the tradelines array has the following fields.
 
 | Key | Type | Required | Description |
@@ -337,7 +337,7 @@ Each tradeline object in the tradelines array has the following fields.
 | writeoffSettledStatus | string | Yes | |
 | writeoffTotalAmt | number | No | write-off amount - total |
 
-## applicant
+#### applicant
 The applicant object has the following fields.
 
 | Key | Type | Required | Description |
