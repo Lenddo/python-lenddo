@@ -248,7 +248,7 @@ results = response['score']
 pd = response['pd']
 ```
 
-### partner_data format for FICO scoring
+### CommitPartnerJob partner_data format for FICO scoring
 The partner_data format for a FICO score application has has three required fields:
 - **application** dictionary, required
 - **bureauData** dictionar
