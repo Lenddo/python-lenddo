@@ -78,11 +78,11 @@ def _traverse_query(params, key_tree):
 class LenddoAPIClient(object):
 	"""LenddoAPIClient provides an interface to the Lenddo APIs.
 
-        Example of an HTTP GET to "https://scoreservice.lenddo.com/ClientScore/example-user":
+        Example of an HTTP GET to "https://scoreservice.lenddo.com/ApplicationScore/example-user":
 	from lenddo_api_client import LenddoAPIClient
 	client = LenddoAPIClient('your-api-client-id', 'your-api-client-secret',
 		'https://scoreservice.lenddo.com')
-	response = client.get('ClientScore', 'example-user')
+	response = client.get('ApplicationScore', 'example-application-id')
 
 	Exceptions are not caught and are all standard exceptions documented
 	in standard library docs. Be prepared for:
