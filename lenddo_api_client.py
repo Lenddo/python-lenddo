@@ -2,10 +2,10 @@
 from __future__ import with_statement
 
 import base64
+import datetime
 import hashlib
 import hmac
 import json
-import time
 import urllib
 import urllib2
 import contextlib
@@ -91,7 +91,7 @@ class LenddoAPIClient(object):
 	- ValueError (failed to decode JSON, malformed endpoint URL)
 	"""
 
-	USER_AGENT = "LenddoAPIClient.py version 1.0"
+	USER_AGENT = "LenddoAPIClient.py version 2.0"
 
 
 	def __init__(self, client_id, secret_key, endpoint):
@@ -166,9 +166,7 @@ class LenddoAPIClient(object):
 			body = md5_sum = None
 			headers = {}
 
-		date = ' '.join((time.strftime('%a %b'),
-			time.strftime('%d').lstrip('0'),
-			time.strftime('%H:%M:%S %Z %Y').lstrip('0')))
+		date = datetime.datetime.utcnow().isoformat()
 		auth_string = '\n'.join((http_method, md5_sum or '', date, path))
 		headers.update({
 			'Authorization' : self._sign(auth_string),
