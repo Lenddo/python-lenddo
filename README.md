@@ -142,7 +142,7 @@ the `provider_response` varies among OAuth providers; see the OAuth provider's d
 import json
 
 from lenddo_api_client import LenddoAPIClient
-from lenddo_api_client.errors import HTTPError, URLError
+from lenddo_api_client.errors import HTTPError
 
 
 client = LenddoAPIClient(
