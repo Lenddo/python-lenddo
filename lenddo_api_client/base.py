@@ -1,14 +1,14 @@
 # Tested on python 2.6.6, 2.7
-from __future__ import with_statement
+from __future__ import absolute_import, with_statement
 
 import base64
 import datetime
 import hashlib
 import hmac
 import json
-import urllib
-import urllib2
 import contextlib
+
+from lenddo_api_client import compat
 
 
 def build_query(params):
@@ -30,7 +30,7 @@ def build_query(params):
     Arguments:
     - params dict
     """
-    return '&'.join(['%s=%s' % (urllib.quote(k), urllib.quote(v))
+    return '&'.join(['%s=%s' % (compat.quote(k), compat.quote(v))
                      for k, v in sorted(query_tuples(params))])
 
 
@@ -62,11 +62,11 @@ def _traverse_query(params, key_tree):
     '''
     tuples = []
     if params:
-        for key, val in params.iteritems():
+        for key, val in params.items():
             cur_tree = key_tree + [key]  # list of nested keys
-            if hasattr(val, 'iteritems'):  # a dict or dict-like object
+            if hasattr(val, 'items'):  # a dict or dict-like object
                 tuples.extend(_traverse_query(val, cur_tree))
-            elif hasattr(val, '__iter__'):  # a sequence, so stringify the indexes
+            elif isinstance(val, (list, tuple)):  # a sequence, so stringify the indexes
                 seq_as_dict = dict((str(idx), item) for idx, item in enumerate(val))
                 tuples.extend(_traverse_query(seq_as_dict, cur_tree))
             else:  # scalar
@@ -180,16 +180,16 @@ class LenddoAPIClient(object):
 
         schema = self.endpoint.split('://')[0]
         if schema == 'http':
-            opener = urllib2.build_opener(urllib2.HTTPHandler)
+            opener = compat.build_opener(compat.HTTPHandler)
         elif schema == 'https':
-            opener = urllib2.build_opener(urllib2.HTTPSHandler)
+            opener = compat.build_opener(compat.HTTPSHandler)
         else:
             raise ValueError('Unrecognized endpoint URL schema.')
 
         url = self.endpoint + path
         if query:
             url += '?' + build_query(query)
-        request = urllib2.Request(url, body, headers)
+        request = compat.Request(url, body, headers)
         request.get_method = lambda: http_method
 
         with contextlib.closing(opener.open(request)) as handle:
@@ -198,6 +198,9 @@ class LenddoAPIClient(object):
 
     def _sign(self, s):
         """Generate the security signature from an input string."""
-        return 'LENDDO %s:%s' % (self.client_id,
-                                 base64.b64encode(
-                                     hmac.new(str(self.secret_key), s, hashlib.sha1).digest()))
+        auth_string = s.encode('utf-8')
+        secret_key = self.secret_key.encode('utf-8')
+        token = base64.b64encode(
+            hmac.new(secret_key, auth_string, hashlib.sha1
+        ).digest()).decode('utf-8')
+        return 'LENDDO %s:%s' % (self.client_id, token)

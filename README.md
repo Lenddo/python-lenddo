@@ -25,12 +25,13 @@ To install our client use `pip`:
 $ pip install lenddo
 ```
 
-Version `1.0.0` only supports python `2.6.x` and `2.7.x`.
+Version `1.1.0` supports both python `2.7.x` and python `3.x`.
+If any bug is encountered kindly report the issue [here](https://github.com/Lenddo/python-lenddo/issues/new).
 
 ## Manual Installation
 The python Lenddo API client library has no third-party dependencies. The only installation
 step is to copy and drop the directory `lenddo_api_client/` into a directory in your `PYTHONPATH`. The client has
-been tested with python versions `2.6.x` and `2.7.x`.
+been tested with python versions `2.7.x` and `3.6.x`.
 
 ## General Usage
 In order to make API calls, first instantiate a `LenddoAPIClient` initialized
