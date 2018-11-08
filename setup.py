@@ -26,6 +26,7 @@ setup(
     version=about['__version__'],
     description='Python library for integrating Lenddo Services. https://www.lenddo.com',
     long_description=readme,
+    long_description_content_type='text/markdown',
     author='Lenddo',
     author_email='techbilling@lenddo.com',
     url='https://github.com/Lenddo/python-lenddo',
