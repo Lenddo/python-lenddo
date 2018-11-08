@@ -3,6 +3,7 @@
 ## Table of Contents
 - [Introduction](#introduction)
 - [Installation](#installation)
+- [Manual Installation](#manual-installation)
 - [General Usage](#general-usage)
   - [Example: Requesting one of your application's Lenddo Score](#example-requesting-one-of-your-applications-lenddo-score)
   - [Exceptions and Error Handling](#exceptions-and-error-handling)
@@ -19,9 +20,17 @@ a generic interface to all the Lenddo HTTP APIs. The client makes authenticated 
 using the HMAC-SHA1 signing method.
 
 ## Installation
+To install our client use `pip`:
+```
+$ pip install lenddo
+```
+
+Version `1.0.0` only supports python `2.6.x` and `2.7.x`.
+
+## Manual Installation
 The python Lenddo API client library has no third-party dependencies. The only installation
-step is to drop `lenddo_api_client.py` into a directory in your `PYTHONPATH`. The client has
-been tested with python versions 2.6.x and 2.7.x. 
+step is to copy and drop the directory `lenddo_api_client/` into a directory in your `PYTHONPATH`. The client has
+been tested with python versions `2.6.x` and `2.7.x`.
 
 ## General Usage
 In order to make API calls, first instantiate a `LenddoAPIClient` initialized
