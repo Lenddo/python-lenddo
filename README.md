@@ -25,12 +25,13 @@ To install our client use `pip`:
 $ pip install lenddo
 ```
 
-Version `1.0.0` only supports python `2.6.x` and `2.7.x`.
+Version `1.1.0` supports both python `2.7.x` and python `3.x`.
+If any bug is encountered kindly report the issue [here](https://github.com/Lenddo/python-lenddo/issues/new).
 
 ## Manual Installation
 The python Lenddo API client library has no third-party dependencies. The only installation
 step is to copy and drop the directory `lenddo_api_client/` into a directory in your `PYTHONPATH`. The client has
-been tested with python versions `2.6.x` and `2.7.x`.
+been tested with python versions `2.7.x` and `3.6.x`.
 
 ## General Usage
 In order to make API calls, first instantiate a `LenddoAPIClient` initialized
@@ -59,35 +60,42 @@ response = client.get('ApplicationScore', 'example-application')
 This results in a signed HTTP GET request to `https://scoreservice.lenddo.com/ApplicationScore/example-application`.
 
 ### Exceptions and Error Handling
-The exceptions raised by the client are standard exceptions documented in standard library docs. Be prepared for:
-* [urllib2.HTTPError](https://docs.python.org/2/library/urllib2.html#urllib2.HTTPError)
-Raised by the underlying urllib2 library when an API call returns non-success status.
-* [urllib2.URLError] (https://docs.python.org/2/library/urllib2.html#urllib2.URLError)
-Raised on network error.
+Exceptions raised by the client are standard exceptions documented in standard library docs.
+The sdk client provides a wrapper module for these exceptions in `lenddo_api_client.errors`.
+
+| exception | description | `2.x` | `3.x` |
+| --------- | ----------- | ----- | ----- |
+| `HTTPError` | Raised when an API call returns a non-success status. | [link][py2-http-error] | [link][py3-http-error] |
+| `URLError` | Raised on network error. | [link][py2-url-error] | [link][py3-url-error] |
 
 The following is the same request as in the previous example, this time with error handling included:
 
 ```python
 import json
-import urllib2
 
 from lenddo_api_client import LenddoAPIClient
-client = LenddoAPIClient('your-api-client-id', 'your-api-client-secret',
-	'https://scoreservice.lenddo.com')
-try:
-	response = client.get('ApplicationScore', 'example-application')
-except urllib2.HTTPError as e:
-	print 'API call failed with status %d' % e.code
+from lenddo_api_client.errors import HTTPError, URLError
 
-	# Error responses from the Lenddo APIs still return JSON bodies describing error details,
-	# only now we have to decode the JSON ourselves.
-	print json.loads(e.read())
-except urllib2.URLError as e:
-	print 'API call failed with reason %s' % e.reason
+
+client = LenddoAPIClient(
+    'your-api-client-id', 
+    'your-api-client-secret',
+    'https://scoreservice.lenddo.com'
+)
+try:
+    response = client.get('ApplicationScore', 'example-application')
+except HTTPError as e:
+    print('API call failed with status %d' % e.code)
+
+    # Error responses from the Lenddo APIs still return JSON bodies describing error details,
+    # only now we have to decode the JSON ourselves.
+    print(json.loads(e.read()))
+except URLError as e:
+    print('API call failed with reason %s' % e.reason)
 ```
 
 For the sake of brevity, we omit error handling in subsequent examples. In production code, calls should
-be made taking into account at least the possibility of `urllib2.HTTPError`.
+be made taking into account at least the possibility of `HTTPError`.
 
 ## Submitting Applications to Lenddo: Using the API Client as a White Label Solution
 
@@ -132,26 +140,31 @@ the `provider_response` varies among OAuth providers; see the OAuth provider's d
 #### Example
 ```python
 import json
-import urllib2
-from lenddo_api_client import LenddoAPIClient
 
-client = LenddoAPIClient('your-api-client-id', 'your-api-client-secret',
-	'https://networkservice.lenddo.com')
+from lenddo_api_client import LenddoAPIClient
+from lenddo_api_client.errors import HTTPError
+
+
+client = LenddoAPIClient(
+    'your-api-client-id', 
+    'your-api-client-secret',
+    'https://networkservice.lenddo.com'
+)
 try:
     response = client.post('PartnerToken', None, {
         'application_id' : 'example-application',
         'provider' : 'Facebook',
         'token_data' : { 'key' : 'example-access-token' }})
-except urllib2.HTTPError as e:
-    print 'API call failed with HTTP status %d' % e.code
-    print json.loads(e.read())
+except HTTPError as e:
+    print('API call failed with HTTP status %d' % e.code)
+    print(json.loads(e.read()))
 
 profile_id = response['profile_id']
 # ... and store this profile_id - application_id association
 ```
 
 #### Errors
-To inspect error details, catch urllib2.HTTPError, call the exception object's 'read()' method, and decode the
+To inspect error details, catch `HTTPError`, call the exception object's 'read()' method, and decode the
 JSON response.  In the table below, 'Error Name' refers to the string found in the response body's 'name' field.
 
 |Error Name                         |HTTP Status Code    |Description |
@@ -194,7 +207,7 @@ client.post('CommitPartnerJob', None, {
 ```
 
 #### Errors
-To inspect error details, catch urllib2.HTTPError, call the exception object's 'read()' method, and decode the
+To inspect error details, catch `HTTPError`, call the exception object's `read()` method, and decode the
 JSON response.  In the table below, 'Error Name' refers to the string found in the response body's 'name' field.
 
 |Error Name                         |HTTP Status Code    |Description |
@@ -370,7 +383,7 @@ The applicant object has the following fields.
 | existingCustomer | object | No | object with fields "timeWithTheBank" (integer) and "noOfAccountsWithTheBank" (integer)
 
 ### Errors
-To inspect error details, catch urllib2.HTTPError, call the exception object's 'read()' method, and decode the
+To inspect error details, catch `HTTPError`, call the exception object's `read()` method, and decode the
 JSON response.  In the table below, 'Error Name' refers to the string found in the response body's 'name' field.
 
 |Error Name        |HTTP Status Code    |Description |
@@ -379,3 +392,7 @@ JSON response.  In the table below, 'Error Name' refers to the string found in t
 |INTERNAL_ERROR    |500                 |An internal error occurred. If this persists please contact a Lenddo Representative. |
 |NOT_FOUND         |404                 |The requested application_id was not found. |
 
+[py2-http-error]: https://docs.python.org/2/library/urllib2.html#urllib2.HTTPError
+[py2-url-error]: https://docs.python.org/2/library/urllib2.html#urllib2.URLError
+[py3-http-error]: https://docs.python.org/3/library/urllib.error.html?highlight=httperror#urllib.error.HTTPError
+[py3-url-error]: https://docs.python.org/3/library/urllib.error.html?highlight=httperror#urllib.error.URLError
