@@ -35,9 +35,7 @@ been tested with python versions `2.7.x` and `3.6.x`.
 
 ## General Usage
 In order to make API calls, first instantiate a `LenddoAPIClient` initialized
-with your API id, your API secret, the base URL of the API resource you intend to use and 
-(optionally) the [HTTP proxies dict](https://docs.python.org/2/library/urllib2.html#proxyhandler-objects) 
-when you have a requirement for using proxies to connect to external services. You
+with your API id, your API secret, the base URL of the API resource you intend to use. You
 may then make HTTP requests using the client's `get`, `post`, `put`, `delete` and `options`
 methods, which are named after the respective HTTP methods. Arguments to
 these methods take the form `(resource-type, resource-id, parameter-dictionary)`:
@@ -47,6 +45,8 @@ these methods take the form `(resource-type, resource-id, parameter-dictionary)`
 - `parameter-dictionary` contains additional parameters supported by the call.
 In the case of a GET request, these are converted to the request query string. In a POST
 or PUT request, they are JSON-encoded and submitted as the request body.
+
+> Optionally, you can use [proxies](#request-a-lenddo-score-behind-a-http-proxy) when connecting to external services.
 
 ### Example: Requesting one of your application's Lenddo Score
 In this example we make a GET request to the `ApplicationScore` API to obtain the score for a
@@ -79,6 +79,7 @@ client = LenddoAPIClient(
          )
 response = client.get('ApplicationScore', 'example-application')         
 ```
+The `HTTP_PROXIES` dictionary is based on python's ['proxies' dict](https://docs.python.org/2/library/urllib2.html#proxyhandler-objects).
 
 ### Exceptions and Error Handling
 Exceptions raised by the client are standard exceptions documented in standard library docs.
