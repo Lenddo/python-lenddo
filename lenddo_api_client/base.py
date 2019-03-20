@@ -96,10 +96,11 @@ class LenddoAPIClient(object):
 
     USER_AGENT = "LenddoAPIClient.py version 2.0"
 
-    def __init__(self, client_id, secret_key, endpoint):
+    def __init__(self, client_id, secret_key, endpoint, proxies=None):
         self.client_id = client_id
         self.secret_key = secret_key
         self.endpoint = endpoint
+        self.proxies = proxies
 
     def get(self, resource, args=None, query=None):
         """Send an HTTP GET request to a resource endpoint. Return parsed response.
@@ -178,13 +179,16 @@ class LenddoAPIClient(object):
             'User-agent': LenddoAPIClient.USER_AGENT
         })
 
-        schema = self.endpoint.split('://')[0]
-        if schema == 'http':
-            opener = compat.build_opener(compat.HTTPHandler)
-        elif schema == 'https':
-            opener = compat.build_opener(compat.HTTPSHandler)
+        if self.proxies:
+            opener = compat.build_opener(compat.ProxyHandler(self.proxies))
         else:
-            raise ValueError('Unrecognized endpoint URL schema.')
+            schema = self.endpoint.split('://')[0]
+            if schema == 'http':
+                opener = compat.build_opener(compat.HTTPHandler)
+            elif schema == 'https':
+                opener = compat.build_opener(compat.HTTPSHandler)
+            else:
+                raise ValueError('Unrecognized endpoint URL schema.')
 
         url = self.endpoint + path
         if query:
