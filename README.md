@@ -35,7 +35,7 @@ been tested with python versions `2.7.x` and `3.6.x`.
 
 ## General Usage
 In order to make API calls, first instantiate a `LenddoAPIClient` initialized
-with your API id, your API secret and the base URL of the API resource you intend to use. You
+with your API id, your API secret, the base URL of the API resource you intend to use. You
 may then make HTTP requests using the client's `get`, `post`, `put`, `delete` and `options`
 methods, which are named after the respective HTTP methods. Arguments to
 these methods take the form `(resource-type, resource-id, parameter-dictionary)`:
@@ -46,18 +46,40 @@ these methods take the form `(resource-type, resource-id, parameter-dictionary)`
 In the case of a GET request, these are converted to the request query string. In a POST
 or PUT request, they are JSON-encoded and submitted as the request body.
 
+> Optionally, you can use [proxies](#request-a-lenddo-score-behind-a-http-proxy) when connecting to external services.
+
 ### Example: Requesting one of your application's Lenddo Score
 In this example we make a GET request to the `ApplicationScore` API to obtain the score for a
 application with id `example-application`. `ApplicationScore` is hosted at `scoreservice.lenddo.com`.
 
+#### Request a Lenddo score with the LenddoAPIClient
 ```python
 from lenddo_api_client import LenddoAPIClient
+
 client = LenddoAPIClient('your-api-client-id', 'your-api-client-secret',
 	'https://scoreservice.lenddo.com')
 response = client.get('ApplicationScore', 'example-application')
 ```
 
 This results in a signed HTTP GET request to `https://scoreservice.lenddo.com/ApplicationScore/example-application`.
+
+#### Request a Lenddo score behind a HTTP proxy
+Say your HTTP proxy is running at the http://192.168.1.100 address in your internal network: 
+```python
+from lenddo_api_client import LenddoAPIClient
+
+HTTP_PROXIES = {
+    'http': 'http://192.168.1.100',
+    'https': 'http://192.168.1.100',
+}
+
+client = LenddoAPIClient(
+            'your-api-client-id', 'your-api-client-secret', 
+            'https://scoreservice.lenddo.com', proxies=HTTP_PROXIES
+         )
+response = client.get('ApplicationScore', 'example-application')         
+```
+The `HTTP_PROXIES` dictionary is based on python's ['proxies' dict](https://docs.python.org/2/library/urllib2.html#proxyhandler-objects).
 
 ### Exceptions and Error Handling
 Exceptions raised by the client are standard exceptions documented in standard library docs.
